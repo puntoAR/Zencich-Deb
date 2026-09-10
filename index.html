@@ -104,28 +104,30 @@
         .btn-confirm { background: #bbf7d0; color: #143A2B; border: none; padding: 14px 24px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; transition: background 0.2s; }
         .btn-confirm:hover { background: #86efac; }
 
-        /* Contacto Grid Corregido para evitar saltos de línea en números */
+        /* Contacto Grid Optimizado */
         .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 10px; }
-        .contact-box { background: #f9fafb; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px 10px; text-align: center; text-decoration: none; color: var(--text-main); display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; font-size: 0.85rem; white-space: nowrap; }
+        .contact-box { background: #f9fafb; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px 10px; text-align: center; text-decoration: none; color: var(--text-main); display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; font-size: 0.85rem; }
         .contact-box.whatsapp { background: #f0fdf4; border-color: #bbf7d0; color: #15803d; }
 
         footer { text-align: center; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding: 16px 20px; line-height: 1.4; background: #f9fafb; }
         footer div { margin-top: 2px; font-size: 0.75rem; }
 
-        /* Media Queries para adaptabilidad perfecta en Celulares manteniendo las tarjetas en una sola fila */
+        /* Media Queries: En PC se ve horizontal, en celular las tarjetas superiores van apiladas limpiamente y el teléfono se ajusta */
         @media (max-width: 600px) {
             body { padding: 12px; }
             .page { margin: 12px auto; border-radius: 8px; }
             .page-content { padding: 16px; }
             header { padding: 16px; flex-direction: column; gap: 10px; text-align: center; }
-            .summary-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
-            .summary-card { padding: 10px 6px; }
-            .summary-card span { font-size: 0.65rem; }
-            .summary-card strong { font-size: 0.85rem; }
+            
+            /* Tarjetas superiores en columna vertical para móviles (evita aplastamiento) */
+            .summary-grid { grid-template-columns: 1fr; gap: 10px; }
+            
             .timeline-content { flex-direction: column; align-items: flex-start; gap: 6px; }
             .timeline-amount { text-align: left; }
             .contact-grid { grid-template-columns: 1fr; }
-            .contact-box { white-space: normal; font-size: 0.8rem; }
+            
+            /* Ajuste específico para que el número de WhatsApp no se corte feo */
+            .contact-box.whatsapp { font-size: 0.9rem; letter-spacing: -0.2px; }
         }
 
         @media print {
@@ -514,7 +516,7 @@
                                     <h4>Entrega</h4>
                                     <p>Coordinamos la entrega final de tu mercadería.</p>
                                     <span class="time-badge" style="color: var(--text-muted);">Al liberar</span>
-                                ))}
+                                </div>
                             </div>
                         </div>
                     </div>
