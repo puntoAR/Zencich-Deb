@@ -82,12 +82,13 @@
         .sub-row:last-child { border-bottom: none; }
         .sub-row span:last-child { font-weight: 600; color: var(--text-main); }
 
-        /* Timeline / Etapas con montos alineados a la derecha */
+        /* Timeline / Etapas con adaptabilidad móvil robusta */
         .timeline-container { position: relative; padding-left: 10px; }
         .timeline-step { display: flex; gap: 16px; margin-bottom: 24px; position: relative; align-items: flex-start; }
         .timeline-step:not(:last-child)::before { content: ''; position: absolute; left: 15px; top: 32px; bottom: -28px; width: 2px; background: var(--border-green); }
         .timeline-number { background: var(--accent-green); color: var(--text-green); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; flex-shrink: 0; border: 1px solid var(--border-green); }
-        .timeline-content { display: grid; grid-template-columns: 1fr auto; gap: 12px; width: 100%; align-items: start; }
+        .timeline-content { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; width: 100%; }
+        .timeline-text { flex-grow: 1; }
         .timeline-text h4 { font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 2px; }
         .timeline-text p { font-size: 0.83rem; color: var(--text-muted); }
         .timeline-text .time-badge { font-size: 0.8rem; color: var(--text-green); font-weight: 600; margin-top: 4px; display: inline-block; }
@@ -105,15 +106,27 @@
 
         /* Contacto Grid */
         .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 10px; }
-        .contact-box { background: #f9fafb; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; text-align: center; text-decoration: none; color: var(--text-main); display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600; font-size: 0.88rem; }
+        .contact-box { background: #f9fafb; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px 8px; text-align: center; text-decoration: none; color: var(--text-main); display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; font-size: 0.85rem; word-break: break-word; }
         .contact-box.whatsapp { background: #f0fdf4; border-color: #bbf7d0; color: #15803d; }
 
         footer { text-align: center; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding: 16px 20px; line-height: 1.4; background: #f9fafb; }
         footer div { margin-top: 2px; font-size: 0.75rem; }
 
+        /* Media Queries para adaptabilidad perfecta en Celulares */
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+            .page { margin: 12px auto; border-radius: 8px; }
+            .page-content { padding: 16px; }
+            header { padding: 16px; flex-direction: column; gap: 10px; text-align: center; }
+            .summary-grid { grid-template-columns: 1fr; gap: 8px; }
+            .timeline-content { flex-direction: column; align-items: flex-start; gap: 6px; }
+            .timeline-amount { text-align: left; }
+            .contact-grid { grid-template-columns: 1fr; }
+        }
+
         @media print {
-            body { background: white; }
-            .page { border: none; box-shadow: none; margin: 0; max-width: 100%; }
+            body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .page { border: none; box-shadow: none; margin: 0; max-width: 100%; page-break-after: always; }
             .accordion-content { display: block !important; }
         }
     </style>
@@ -348,7 +361,7 @@
                     <div class="box-title" style="font-size: 1.2rem; margin-bottom: 6px;">Cómo se paga</div>
                     <div class="box-desc" style="margin-bottom: 24px;">El costo total se paga en etapas, a medida que avanza tu importación.</div>
 
-                    <!-- Lista de pagos por etapas con montos alineados a la derecha -->
+                    <!-- Lista de pagos por etapas con montos alineados a la derecha y adaptabilidad móvil -->
                     <div class="timeline-container">
                         <div class="timeline-step">
                             <div class="timeline-number">1</div>
@@ -512,7 +525,6 @@
                     <ul class="feature-list">
                         <li><span>✓</span> Arrancamos la coordinación de la mercadería con la fábrica</li>
                         <li><span>✓</span> Abrimos un grupo con vos y el proveedor para hablar todos en el mismo lugar</li>
-                        <!--<li><span>✓</span> Te damos acceso a la plataforma para seguir tu importación en tiempo real</li> -->
                     </ul>
 
                     <a href="https://wa.me/5492266415498" target="_blank" class="btn-confirm">
