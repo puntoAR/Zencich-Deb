@@ -112,13 +112,16 @@
         footer { text-align: center; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding: 16px 20px; line-height: 1.4; background: #f9fafb; }
         footer div { margin-top: 2px; font-size: 0.75rem; }
 
-        /* Media Queries para adaptabilidad perfecta en Celulares */
+        /* Media Queries para adaptabilidad perfecta en Celulares manteniendo las tarjetas en una sola fila */
         @media (max-width: 600px) {
             body { padding: 12px; }
             .page { margin: 12px auto; border-radius: 8px; }
             .page-content { padding: 16px; }
             header { padding: 16px; flex-direction: column; gap: 10px; text-align: center; }
-            .summary-grid { grid-template-columns: 1fr; gap: 8px; }
+            .summary-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+            .summary-card { padding: 10px 6px; }
+            .summary-card span { font-size: 0.65rem; }
+            .summary-card strong { font-size: 0.85rem; }
             .timeline-content { flex-direction: column; align-items: flex-start; gap: 6px; }
             .timeline-amount { text-align: left; }
             .contact-grid { grid-template-columns: 1fr; }
@@ -511,7 +514,7 @@
                                     <h4>Entrega</h4>
                                     <p>Coordinamos la entrega final de tu mercadería.</p>
                                     <span class="time-badge" style="color: var(--text-muted);">Al liberar</span>
-                                </div>
+                                ))}
                             </div>
                         </div>
                     </div>
