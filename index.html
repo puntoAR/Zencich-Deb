@@ -44,9 +44,12 @@
         .client-info span { color: var(--text-main); font-weight: 600; }
 
         .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
-        .summary-card { background: #f9fafb; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; }
-        .summary-card span { font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px; }
-        .summary-card strong { font-size: 1.1rem; color: var(--text-main); }
+        
+        /* Estilos de las tarjetas con íconos integrados */
+        .summary-card { background: #f9fafb; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; display: flex; align-items: center; gap: 12px; }
+        .summary-icon { background: var(--accent-green); color: var(--text-green); width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; border: 1px solid var(--border-green); }
+        .summary-info span { font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 2px; }
+        .summary-info strong { font-size: 1.05rem; color: var(--text-main); }
 
         .route-info { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; display: flex; justify-content: space-between; }
         .route-info span { font-weight: 600; color: var(--text-main); }
@@ -70,7 +73,7 @@
         .recupero-text strong { font-size: 0.9rem; color: var(--text-green); display: block; }
         .recupero-text span { font-size: 0.8rem; color: #15803d; }
 
-        /* Botón de Descarga PDF Estilo Referencia */
+        /* Botón de Descarga PDF */
         .btn-pdf { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; background: #ffffff; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; font-weight: 600; font-size: 0.9rem; color: var(--text-main); cursor: pointer; text-decoration: none; margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,0.02); transition: background 0.2s; }
         .btn-pdf:hover { background: #f9fafb; }
 
@@ -133,7 +136,7 @@
             body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .page { border: none; box-shadow: none; margin: 0; max-width: 100%; page-break-after: always; }
             .accordion-content { display: block !important; }
-            .btn-pdf { display: none !important; } /* Oculta el botón en la impresión final */
+            .btn-pdf { display: none !important; }
         }
     </style>
 </head>
@@ -154,19 +157,28 @@
                     Preparada para <span>Jose Argentiro</span> · 7 de septiembre, 2026
                 </div>
 
-                <!-- Tarjetas superiores -->
+                <!-- Tarjetas superiores con íconos agregados -->
                 <div class="summary-grid">
                     <div class="summary-card">
-                        <span>Peso total</span>
-                        <strong>360 kg</strong>
+                        <div class="summary-icon">⚖️</div>
+                        <div class="summary-info">
+                            <span>Peso total</span>
+                            <strong>360 kg</strong>
+                        </div>
                     </div>
                     <div class="summary-card">
-                        <span>Volumen</span>
-                        <strong>4,7 CBM</strong>
+                        <div class="summary-icon">📦</div>
+                        <div class="summary-info">
+                            <span>Volumen</span>
+                            <strong>4,7 CBM</strong>
+                        </div>
                     </div>
                     <div class="summary-card">
-                        <span>Productos</span>
-                        <strong>1 artículo</strong>
+                        <div class="summary-icon">🏷️</div>
+                        <div class="summary-info">
+                            <span>Productos</span>
+                            <strong>1 artículo</strong>
+                        </div>
                     </div>
                 </div>
 
@@ -493,7 +505,7 @@
                                 <div class="timeline-text">
                                     <h4>Tu carga sale en barco</h4>
                                     <p>Gestionamos con la fábrica y el forwarder. Seguís todo desde el HUB.</p>
-                                    <span class="time-badge" style="color: var(--text-muted);">Según producción</span>
+                                    <span class="time-badge" style="color: var(--text-muted);">Secondo producción</span>
                                 </div>
                             </div>
                         </div>
@@ -554,26 +566,10 @@
                     </div>
                 </div>
 
-                <!-- Botón de Descarga PDF al final (exactamente como pediste) -->
+                <!-- Botón de Descarga PDF al final -->
                 <button onclick="guardarPDF()" class="btn-pdf">
-                 📥 Descargar cotización en PDF
+                    📥 Descargar cotización en PDF
                 </button>
-
-                <script>
-                     function guardarPDF() {
-                         if (navigator.share) {
-                             navigator.share({
-                                 title: 'Cotización de Importación - PuntoAR',
-                                 text: 'Revisá los detalles de tu cotización de importación.',
-                                 url: window.location.href
-                             }).catch(() => {
-                                window.print();
-                             });
-                         } else {
-                             window.print();
-                         }
-                    }
-                </script>
             </div>
         </div>
 
@@ -593,6 +589,20 @@
             } else {
                 content.style.display = 'block';
                 arrow.textContent = '▲';
+            }
+        }
+
+        function guardarPDF() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Cotización de Importación - PuntoAR',
+                    text: 'Revisá los detalles de tu cotización de importación.',
+                    url: window.location.href
+                }).catch(() => {
+                    window.print();
+                });
+            } else {
+                window.print();
             }
         }
     </script>
