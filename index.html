@@ -82,7 +82,7 @@
         .sub-row:last-child { border-bottom: none; }
         .sub-row span:last-child { font-weight: 600; color: var(--text-main); }
 
-        /* Timeline / Etapas con adaptabilidad móvil robusta */
+        /* Timeline / Etapas con montos alineados a la derecha */
         .timeline-container { position: relative; padding-left: 10px; }
         .timeline-step { display: flex; gap: 16px; margin-bottom: 24px; position: relative; align-items: flex-start; }
         .timeline-step:not(:last-child)::before { content: ''; position: absolute; left: 15px; top: 32px; bottom: -28px; width: 2px; background: var(--border-green); }
@@ -104,9 +104,9 @@
         .btn-confirm { background: #bbf7d0; color: #143A2B; border: none; padding: 14px 24px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; transition: background 0.2s; }
         .btn-confirm:hover { background: #86efac; }
 
-        /* Contacto Grid */
+        /* Contacto Grid Corregido para evitar saltos de línea en números */
         .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 10px; }
-        .contact-box { background: #f9fafb; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px 8px; text-align: center; text-decoration: none; color: var(--text-main); display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; font-size: 0.85rem; word-break: break-word; }
+        .contact-box { background: #f9fafb; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px 10px; text-align: center; text-decoration: none; color: var(--text-main); display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; font-size: 0.85rem; white-space: nowrap; }
         .contact-box.whatsapp { background: #f0fdf4; border-color: #bbf7d0; color: #15803d; }
 
         footer { text-align: center; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding: 16px 20px; line-height: 1.4; background: #f9fafb; }
@@ -122,6 +122,7 @@
             .timeline-content { flex-direction: column; align-items: flex-start; gap: 6px; }
             .timeline-amount { text-align: left; }
             .contact-grid { grid-template-columns: 1fr; }
+            .contact-box { white-space: normal; font-size: 0.8rem; }
         }
 
         @media print {
@@ -361,7 +362,7 @@
                     <div class="box-title" style="font-size: 1.2rem; margin-bottom: 6px;">Cómo se paga</div>
                     <div class="box-desc" style="margin-bottom: 24px;">El costo total se paga en etapas, a medida que avanza tu importación.</div>
 
-                    <!-- Lista de pagos por etapas con montos alineados a la derecha y adaptabilidad móvil -->
+                    <!-- Lista de pagos por etapas con montos alineados a la derecha -->
                     <div class="timeline-container">
                         <div class="timeline-step">
                             <div class="timeline-number">1</div>
@@ -531,7 +532,7 @@
                         → Confirmar y arrancar
                     </a>
                     <div style="font-size: 0.78rem; color: #9ca3af; margin-top: 12px;">
-                        Te abrimos WhatsApp con nuestro equipo para coordinar el pago. En cuanto se acredita, tu importación arranca.
+                        Te abrimos WhatsApp con nuestro equipo para coordinar el pago. Inmediatamente se acredita, tu importación arranca.
                     </div>
                 </div>
 
