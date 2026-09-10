@@ -555,9 +555,25 @@
                 </div>
 
                 <!-- Botón de Descarga PDF al final (exactamente como pediste) -->
-                <button onclick="window.print()" class="btn-pdf">
-                    📥 Descargar cotización en PDF
+                <button onclick="guardarPDF()" class="btn-pdf">
+                 📥 Descargar cotización en PDF
                 </button>
+
+                <script>
+                     function guardarPDF() {
+                         if (navigator.share) {
+                             navigator.share({
+                                 title: 'Cotización de Importación - PuntoAR',
+                                 text: 'Revisá los detalles de tu cotización de importación.',
+                                 url: window.location.href
+                             }).catch(() => {
+                                window.print();
+                             });
+                         } else {
+                             window.print();
+                         }
+                    }
+                </script>
             </div>
         </div>
 
