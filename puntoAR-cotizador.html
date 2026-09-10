@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotización e Importación - PuntoAR</title>
+    <style>
+        :root {
+            --primary-color: #143A2B;
+            --primary-dark: #0F1A14;
+            --bg-color: #fcfbf9;
+            --card-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --accent-green: #f0fdf4;
+            --border-green: #bbf7d0;
+            --text-green: #166534;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.5; padding-bottom: 40px; }
+        
+        .page {
+            max-width: 900px;
+            margin: 32px auto;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            page-break-after: always;
+        }
+
+        header { background: linear-gradient(120deg, var(--primary-color), var(--primary-dark)); color: white; padding: 20px 32px; display: flex; justify-content: space-between; align-items: center; }
+        .logo-container img { height: 65px; object-fit: contain; }
+        .header-title { font-size: 1.1rem; font-weight: 500; letter-spacing: 0.5px; opacity: 0.9; }
+
+        .page-content { padding: 32px; flex-grow: 1; }
+        
+        .client-info { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; font-weight: 500; }
+        .client-info span { color: var(--text-main); font-weight: 600; }
+
+        .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+        .summary-card { background: #f9fafb; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; }
+        .summary-card span { font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px; }
+        .summary-card strong { font-size: 1.1rem; color: var(--text-main); }
+
+        .route-info { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; display: flex; justify-content: space-between; }
+        .route-info span { font-weight: 600; color: var(--text-main); }
+
+        .section-box { border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 20px; background: white; }
+        .box-title { font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+        .box-desc { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; }
+
+        .product-item { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; }
+        .product-name { font-weight: 600; font-size: 0.95rem; color: var(--text-main); }
+        .product-detail { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+        .product-price { font-weight: 700; font-size: 1rem; text-align: right; }
+
+        .metric-block { margin-bottom: 20px; }
+        .metric-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
+        .metric-value { font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-top: 2px; }
+        .metric-sub { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+
+        .recupero-banner { background-color: var(--accent-green); border: 1px solid var(--border-green); border-radius: 8px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; margin-top: 20px; }
+        .recupero-icon { background: #dcfce7; color: var(--text-green); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
+        .recupero-text strong { font-size: 0.9rem; color: var(--text-green); display: block; }
+        .recupero-text span { font-size: 0.8rem; color: #15803d; }
+
+        /* Acordeones y líneas de tiempo */
+        .accordion-item { border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 12px; background: white; overflow: hidden; }
+        .accordion-header { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 16px; background: #fff; border: none; cursor: pointer; text-align: left; }
+        .accordion-header:hover { background: #f9fafb; }
+        .accordion-title { font-weight: 700; font-size: 0.95rem; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
+        .accordion-subtitle { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+        .accordion-price { font-weight: 700; font-size: 1rem; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
+        .accordion-content { display: none; padding: 16px; background: #fcfbf9; border-top: 1px solid var(--border-color); }
+        .sub-row { display: flex; justify-content: space-between; font-size: 0.88rem; padding: 8px 0; border-bottom: 1px dashed var(--border-color); color: var(--text-muted); }
+        .sub-row:last-child { border-bottom: none; }
+        .sub-row span:last-child { font-weight: 600; color: var(--text-main); }
+
+        /* Timeline / Etapas con montos alineados a la derecha */
+        .timeline-container { position: relative; padding-left: 10px; }
+        .timeline-step { display: flex; gap: 16px; margin-bottom: 24px; position: relative; align-items: flex-start; }
+        .timeline-step:not(:last-child)::before { content: ''; position: absolute; left: 15px; top: 32px; bottom: -28px; width: 2px; background: var(--border-green); }
+        .timeline-number { background: var(--accent-green); color: var(--text-green); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; flex-shrink: 0; border: 1px solid var(--border-green); }
+        .timeline-content { display: grid; grid-template-columns: 1fr auto; gap: 12px; width: 100%; align-items: start; }
+        .timeline-text h4 { font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 2px; }
+        .timeline-text p { font-size: 0.83rem; color: var(--text-muted); }
+        .timeline-text .time-badge { font-size: 0.8rem; color: var(--text-green); font-weight: 600; margin-top: 4px; display: inline-block; }
+        .timeline-amount { font-weight: 800; font-size: 1rem; color: var(--text-main); text-align: right; white-space: nowrap; }
+
+        /* Tarjeta oscura "Empecemos" */
+        .dark-card { background: linear-gradient(135deg, #0F1A14, #143A2B); color: white; border-radius: 16px; padding: 28px; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(20, 58, 43, 0.2); }
+        .dark-card h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; }
+        .dark-card p { font-size: 0.9rem; color: #d1d5db; margin-bottom: 16px; line-height: 1.4; }
+        .feature-list { list-style: none; margin-bottom: 24px; }
+        .feature-list li { font-size: 0.88rem; color: #e5e7eb; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .feature-list li span { color: #4ade80; font-weight: bold; }
+        .btn-confirm { background: #bbf7d0; color: #143A2B; border: none; padding: 14px 24px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; transition: background 0.2s; }
+        .btn-confirm:hover { background: #86efac; }
+
+        /* Contacto Grid */
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 10px; }
+        .contact-box { background: #f9fafb; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; text-align: center; text-decoration: none; color: var(--text-main); display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600; font-size: 0.88rem; }
+        .contact-box.whatsapp { background: #f0fdf4; border-color: #bbf7d0; color: #15803d; }
+
+        footer { text-align: center; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding: 16px 20px; line-height: 1.4; background: #f9fafb; }
+        footer div { margin-top: 2px; font-size: 0.75rem; }
+
+        @media print {
+            body { background: white; }
+            .page { border: none; box-shadow: none; margin: 0; max-width: 100%; }
+            .accordion-content { display: block !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= PÁGINA 1: RESUMEN EJECUTIVO ================= -->
+    <div class="page">
+        <div>
+            <header>
+                <div class="logo-container">
+                    <img src="puntoAR_logo_placa_blanca_alargada2.png" alt="PuntoAR Logo">
+                </div>
+                <div class="header-title">Cotización de Importación</div>
+            </header>
+
+            <div class="page-content">
+                <div class="client-info">
+                    Preparada para <span>Jose Argentiro</span> · 7 de septiembre, 2026
+                </div>
+
+                <!-- Tarjetas superiores -->
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <span>Peso total</span>
+                        <strong>360 kg</strong>
+                    </div>
+                    <div class="summary-card">
+                        <span>Volumen</span>
+                        <strong>4,7 CBM</strong>
+                    </div>
+                    <div class="summary-card">
+                        <span>Productos</span>
+                        <strong>1 artículo</strong>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <div class="route-info">
+                        <span>Marítimo · China → Argentina · 1 productos</span>
+                        <span>#ADX-001381</span>
+                    </div>
+
+                    <div class="box-title">Precio de los productos</div>
+                    <div class="box-desc">Lo que le pagás a la fábrica (FOB). Todavía sin flete, impuestos ni gastos.</div>
+
+                    <div class="product-item">
+                        <div>
+                            <div class="product-name">Silla de estética E019-2</div>
+                            <div class="product-detail">4 uds × USD $480.00</div>
+                        </div>
+                        <div class="product-price">USD $1,920.00</div>
+                    </div>
+
+                    <div class="metric-block" style="border-bottom: 1px solid var(--border-color); padding-bottom: 20px; margin-bottom: 20px;">
+                        <div class="metric-label">Costo de los productos</div>
+                        <div class="metric-value">USD $1,920.00</div>
+                        <div class="metric-sub">≈ $ 2.937.600</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">El valor de la mercadería</div>
+                    </div>
+
+                    <div class="metric-block">
+                        <div class="metric-label">Costos de importación</div>
+                        <div class="metric-value">USD $7,898.27</div>
+                        <div class="metric-sub">≈ $ 12.084.353</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">Flete, seguro, impuestos, gastos y nuestro servicio</div>
+                    </div>
+
+                    <!-- Banner de Recupero -->
+                    <div class="recupero-banner">
+                        <div class="recupero-icon">↺</div>
+                        <div class="recupero-text">
+                            <strong>Tu costo de importación real es USD $6,322.55</strong>
+                            <span>Ya descontado el recupero de impuestos</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            Valores sujetos a variación del tipo de cambio al momento del pago
+            <div>puntoAR | empresa.puntoAR@gmail.com | +54 9 2266 41-5498</div>
+        </footer>
+    </div>
+
+    <!-- ================= PÁGINA 2: DESGLOSE DETALLADO CON ACORDEONES ================= -->
+    <div class="page">
+        <div>
+            <header>
+                <div class="logo-container">
+                    <img src="puntoAR_logo_placa_blanca_alargada2.png" alt="PuntoAR Logo">
+                </div>
+                <div class="header-title">Desglose Detallado</div>
+            </header>
+
+            <div class="page-content">
+                <div style="margin-bottom: 24px;">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 14px; font-weight: 700;">Desglose por concepto</h3>
+
+                    <!-- 1. Mercadería (FOB) -->
+                    <div class="accordion-item">
+                        <button class="accordion-header" onclick="toggleAccordion('fob-content', this)">
+                            <div>
+                                <div class="accordion-title">📦 Mercadería (FOB)</div>
+                                <div class="accordion-subtitle">Lo que le pagás a la fábrica</div>
+                            </div>
+                            <div class="accordion-price">USD $1,920.00 <span style="font-size:0.8rem">▼</span></div>
+                        </button>
+                        <div id="fob-content" class="accordion-content">
+                            <div class="sub-row"><span>Silla de estética E019-2 (4 uds)</span><span>USD $1,920.00</span></div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Flete y seguro marítimo -->
+                    <div class="accordion-item">
+                        <button class="accordion-header" onclick="toggleAccordion('flete-content', this)">
+                            <div>
+                                <div class="accordion-title">⚓ Flete y seguro marítimo</div>
+                                <div class="accordion-subtitle">Marítimo · traer la carga hasta destino</div>
+                            </div>
+                            <div class="accordion-price">USD $710.80 <span style="font-size:0.8rem">▼</span></div>
+                        </button>
+                        <div id="flete-content" class="accordion-content">
+                            <div class="sub-row"><span>Flete internacional</span><span>USD $684.75</span></div>
+                            <div class="sub-row"><span>Seguro internacional</span><span>USD $26.05</span></div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Impuestos de importación -->
+                    <div class="accordion-item">
+                        <button class="accordion-header" onclick="toggleAccordion('impuestos-content', this)">
+                            <div>
+                                <div class="accordion-title">📋 Impuestos de importación</div>
+                                <div class="accordion-subtitle">Arancel, tasa, IVA y percepciones · parte recuperable</div>
+                            </div>
+                            <div class="accordion-price">USD $2,128.18 <span style="font-size:0.8rem">▼</span></div>
+                        </button>
+                        <div id="impuestos-content" class="accordion-content">
+                            <div class="sub-row"><span>Derechos de importación (arancel)</span><span>USD $473.54</span></div>
+                            <div class="sub-row"><span>Tasa estadística</span><span>USD $78.92</span></div>
+                            <div class="sub-row"><span>IVA</span><span>USD $668.49</span></div>
+                            <div class="sub-row"><span>IVA adicional</span><span>USD $636.65</span></div>
+                            <div class="sub-row"><span>Percepción IIBB</span><span>USD $79.58</span></div>
+                            <div class="sub-row"><span>Percepción Ganancias</span><span>USD $191.00</span></div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Gastos en destino -->
+                    <div class="accordion-item">
+                        <button class="accordion-header" onclick="toggleAccordion('gastos-content', this)">
+                            <div>
+                                <div class="accordion-title">🏢 Gastos en destino</div>
+                                <div class="accordion-subtitle">Puerto, terminal, transporte y despacho</div>
+                            </div>
+                            <div class="accordion-price">USD $2,201.95 <span style="font-size:0.8rem">▼</span></div>
+                        </button>
+                        <div id="gastos-content" class="accordion-content">
+                            <div class="sub-row"><span>Tasa AGP (LCL)</span><span>USD $18.89</span></div>
+                            <div class="sub-row"><span>Manejo de documentación (LCL)</span><span>USD $75.00</span></div>
+                            <div class="sub-row"><span>Gastos administrativos depósito LCL</span><span>USD $80.00</span></div>
+                            <div class="sub-row"><span>CF TLAT</span><span>USD $90.00</span></div>
+                            <div class="sub-row"><span>Gastos operativos</span><span>USD $300.00</span></div>
+                            <div class="sub-row"><span>Desconsolidación</span><span>USD $118.06</span></div>
+                            <div class="sub-row"><span>Emisión BL</span><span>USD $65.00</span></div>
+                            <div class="sub-row"><span>Depósito fiscal LCL 0 - 5 m³</span><span>USD $865.00</span></div>
+                            <div class="sub-row"><span>Entrega LCL 0 - 5 m³</span><span>USD $165.00</span></div>
+                            <div class="sub-row"><span>Aduana y liberación</span><span>USD $350.00</span></div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Intervenciones y certificaciones -->
+                    <div class="accordion-item">
+                        <button class="accordion-header" onclick="toggleAccordion('cert-content', this)">
+                            <div>
+                                <div class="accordion-title">🛡️ Intervenciones y certificaciones</div>
+                                <div class="accordion-subtitle">Organismos y certificados requeridos</div>
+                            </div>
+                            <div class="accordion-price">USD $1,900.00 <span style="font-size:0.8rem">▼</span></div>
+                        </button>
+                        <div id="cert-content" class="accordion-content">
+                            <div class="sub-row"><span>ANMAT</span><span>USD $600.00</span></div>
+                            <div class="sub-row"><span>Seguridad Eléctrica (certificación completa)</span><span>USD $1,300.00</span></div>
+                        </div>
+                    </div>
+
+                    <!-- 6. Servicio puntoAR -->
+                    <div class="accordion-item">
+                        <button class="accordion-header" onclick="toggleAccordion('aduanex-content', this)">
+                            <div>
+                                <div class="accordion-title">⚙️ Servicio puntoAR</div>
+                                <div class="accordion-subtitle">Gestión, coordinación y despacho de tu operación</div>
+                            </div>
+                            <div class="accordion-price">USD $1244.55 <span style="font-size:0.8rem">▼</span></div>
+                        </button>
+                        <div id="aduanex-content" class="accordion-content">
+                            <div class="sub-row"><span>Gestión y coordinación de la operación</span><span>USD $1244.55</span></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Total de la cotización -->
+                <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                    <div>
+                        <strong style="font-size: 1.1rem; color: var(--primary-dark);">Total cotización</strong>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">Suma total de conceptos de la importación</p>
+                    </div>
+                    <div style="font-size: 1.6rem; font-weight: 800; color: var(--primary-color);">USD $10,105.48</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            Valores sujetos a variación del tipo de cambio al momento del pago
+            <div>puntoAR | empresa.puntoAR@gmail.com | +54 9 2266 41-5498</div>
+        </footer>
+    </div>
+
+    <!-- ================= PÁGINA 3: CÓMO SE PAGA (ETAPAS) ================= -->
+    <div class="page">
+        <div>
+            <header>
+                <div class="logo-container">
+                    <img src="puntoAR_logo_placa_blanca_alargada2.png" alt="PuntoAR Logo">
+                </div>
+                <div class="header-title">Plan de Pagos</div>
+            </header>
+
+            <div class="page-content">
+                <div class="section-box">
+                    <div class="box-title" style="font-size: 1.2rem; margin-bottom: 6px;">Cómo se paga</div>
+                    <div class="box-desc" style="margin-bottom: 24px;">El costo total se paga en etapas, a medida que avanza tu importación.</div>
+
+                    <!-- Lista de pagos por etapas con montos alineados a la derecha -->
+                    <div class="timeline-container">
+                        <div class="timeline-step">
+                            <div class="timeline-number">1</div>
+                            <div class="timeline-content">
+                                <div class="timeline-text">
+                                    <h4>Confirmación de operación</h4>
+                                    <p>Sale del Servicio puntoAR: no es un costo aparte, es el primer tramo de lo que ya está en el total.</p>
+                                    <span class="time-badge">Al aceptar la cotización</span>
+                                </div>
+                                <div class="timeline-amount">USD $300.00</div>
+                            </div>
+                        </div>
+
+                        <div class="timeline-step">
+                            <div class="timeline-number">2</div>
+                            <div class="timeline-content">
+                                <div class="timeline-text">
+                                    <h4>Pago de mercadería</h4>
+                                    <p>El pago de tu mercadería al proveedor, al confirmar la orden con la fábrica.</p>
+                                    <span class="time-badge" style="color: var(--text-muted);">Fecha estimada · 15 sep</span>
+                                </div>
+                                <div class="timeline-amount">USD $1,920.00</div>
+                            </div>
+                        </div>
+
+                        <div class="timeline-step">
+                            <div class="timeline-number">3</div>
+                            <div class="timeline-content">
+                                <div class="timeline-text">
+                                    <h4>Certificaciones</h4>
+                                    <p>Trámites y homologaciones que requiere tu producto.</p>
+                                    <span class="time-badge" style="color: var(--text-muted);">Fecha estimada · 10 oct</span>
+                                </div>
+                                <div class="timeline-amount">USD $1,900.00</div>
+                            </div>
+                        </div>
+
+                        <div class="timeline-step">
+                            <div class="timeline-number">4</div>
+                            <div class="timeline-content">
+                                <div class="timeline-text">
+                                    <h4>VEP de Aduana</h4>
+                                    <p>Los impuestos de la importación, que se pagan al nacionalizar.</p>
+                                    <span class="time-badge" style="color: var(--text-muted);">Fecha estimada · 20 oct</span>
+                                </div>
+                                <div class="timeline-amount">USD $2,128.18</div>
+                            </div>
+                        </div>
+
+                        <div class="timeline-step">
+                            <div class="timeline-number">5</div>
+                            <div class="timeline-content">
+                                <div class="timeline-text">
+                                    <h4>Liquidación final</h4>
+                                    <p>Flete internacional, gastos en destino y el resto del Servicio puntoAR.</p>
+                                    <span class="time-badge" style="color: var(--text-muted);">Fecha estimada · 25 oct</span>
+                                </div>
+                                <div class="timeline-amount">USD $3,857.30</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total box menor -->
+                    <div style="background: #f9fafb; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; margin-top: 24px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="font-size: 1rem; color: var(--text-main);">Total</strong>
+                            <p style="font-size: 0.78rem; color: var(--text-muted);">Las fechas son estimadas. Los montos son de esta cotización: no se suma nada por pagar en etapas.</p>
+                        </div>
+                        <div style="font-size: 1.4rem; font-weight: 800; color: var(--primary-color);">USD $10,105.48</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            Valores sujetos a variación del tipo de cambio al momento del pago
+            <div>puntoAR | empresa.puntoAR@gmail.com | +54 9 2266 41-5498</div>
+        </footer>
+    </div>
+
+    <!-- ================= PÁGINA 4: QUÉ PASA DESPUÉS Y EMPECEMOS ================= -->
+    <div class="page">
+        <div>
+            <header>
+                <div class="logo-container">
+                    <img src="puntoAR_logo_placa_blanca_alargada2.png" alt="PuntoAR Logo">
+                </div>
+                <div class="header-title">Próximos Pasos</div>
+            </header>
+
+            <div class="page-content">
+                <!-- ¿Qué pasa después? -->
+                <div class="section-box" style="margin-bottom: 24px;">
+                    <div class="box-title" style="font-size: 1.1rem; margin-bottom: 4px;">¿Qué pasa después?</div>
+                    <div class="box-desc" style="margin-bottom: 20px;">Así sigue tu importación marítima una vez que aceptás.</div>
+
+                    <div class="timeline-container">
+                        <div class="timeline-step">
+                            <div class="timeline-number">1</div>
+                            <div class="timeline-content">
+                                <div class="timeline-text">
+                                    <h4>Aceptás la cotización</h4>
+                                    <p>Te registrás en el HUB y confirmás que querés avanzar.</p>
+                                    <span class="time-badge">Hoy</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="timeline-step">
+                            <div class="timeline-number">2</div>
+                            <div class="timeline-content">
+                                <div class="timeline-text">
+                                    <h4>Coordinamos el pago</h4>
+                                    <p>Te contactamos por WhatsApp para coordinar el adelanto y los tiempos.</p>
+                                    <span class="time-badge" style="color: var(--text-muted);">1–2 días</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="timeline-step">
+                            <div class="timeline-number">3</div>
+                            <div class="timeline-content">
+                                <div class="timeline-text">
+                                    <h4>Tu carga sale en barco</h4>
+                                    <p>Gestionamos con la fábrica y el forwarder. Seguís todo desde el HUB.</p>
+                                    <span class="time-badge" style="color: var(--text-muted);">Según producción</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="timeline-step">
+                            <div class="timeline-number">4</div>
+                            <div class="timeline-content">
+                                <div class="timeline-text">
+                                    <h4>Nacionalización en Argentina</h4>
+                                    <p>Despacho aduanero, pago de impuestos y liberación de la carga.</p>
+                                    <span class="time-badge" style="color: var(--text-muted);">45–60 días</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="timeline-step">
+                            <div class="timeline-number">5</div>
+                            <div class="timeline-content">
+                                <div class="timeline-text">
+                                    <h4>Entrega</h4>
+                                    <p>Coordinamos la entrega final de tu mercadería.</p>
+                                    <span class="time-badge" style="color: var(--text-muted);">Al liberar</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta Oscura Empecemos -->
+                <div class="dark-card">
+                    <span style="font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; color: #4ade80; text-transform: uppercase; display: block; margin-bottom: 4px;">Empecemos</span>
+                    <h3>USD $300.00 para arrancar tu importación</h3>
+                    <p>Salen del Servicio puntoAR, que ya está dentro del total de arriba: <strong>no es un costo extra</strong>, es el primer tramo de lo que ya cotizamos.</p>
+                    
+                    <ul class="feature-list">
+                        <li><span>✓</span> Arrancamos la coordinación de la mercadería con la fábrica</li>
+                        <li><span>✓</span> Abrimos un grupo con vos y el proveedor para hablar todos en el mismo lugar</li>
+                        <!--<li><span>✓</span> Te damos acceso a la plataforma para seguir tu importación en tiempo real</li> -->
+                    </ul>
+
+                    <a href="https://wa.me/5492266415498" target="_blank" class="btn-confirm">
+                        → Confirmar y arrancar
+                    </a>
+                    <div style="font-size: 0.78rem; color: #9ca3af; margin-top: 12px;">
+                        Te abrimos WhatsApp con nuestro equipo para coordinar el pago. En cuanto se acredita, tu importación arranca.
+                    </div>
+                </div>
+
+                <!-- Bloque de Dudas / Contacto -->
+                <div class="section-box" style="text-align: center; padding: 20px;">
+                    <div style="font-weight: 700; font-size: 1rem; margin-bottom: 12px;">¿Tenés dudas? Contactanos</div>
+                    <div class="contact-grid">
+                        <a href="https://wa.me/5492266415498" class="contact-box whatsapp">
+                            💬 +54 9 2266 41-5498
+                        </a>
+                        <a href="mailto:empresa.puntoAR@gmail.com" class="contact-box">
+                            ✉️ empresa.puntoAR@gmail.com
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            Valores sujetos a variación del tipo de cambio al momento del pago · Cotización en USD referencial
+            <div>puntoAR | empresa.puntoAR@gmail.com | +54 9 2266 41-5498</div>
+        </footer>
+    </div>
+
+    <script>
+        function toggleAccordion(id, btn) {
+            const content = document.getElementById(id);
+            const arrow = btn.querySelector('.accordion-price span');
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                arrow.textContent = '▼';
+            } else {
+                content.style.display = 'block';
+                arrow.textContent = '▲';
+            }
+        }
+    </script>
+</body>
+</html>
