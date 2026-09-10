@@ -70,6 +70,10 @@
         .recupero-text strong { font-size: 0.9rem; color: var(--text-green); display: block; }
         .recupero-text span { font-size: 0.8rem; color: #15803d; }
 
+        /* Botón de Descarga PDF Estilo Referencia */
+        .btn-pdf { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; background: #ffffff; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; font-weight: 600; font-size: 0.9rem; color: var(--text-main); cursor: pointer; text-decoration: none; margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,0.02); transition: background 0.2s; }
+        .btn-pdf:hover { background: #f9fafb; }
+
         /* Acordeones y líneas de tiempo */
         .accordion-item { border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 12px; background: white; overflow: hidden; }
         .accordion-header { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 16px; background: #fff; border: none; cursor: pointer; text-align: left; }
@@ -112,21 +116,16 @@
         footer { text-align: center; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding: 16px 20px; line-height: 1.4; background: #f9fafb; }
         footer div { margin-top: 2px; font-size: 0.75rem; }
 
-        /* Media Queries: En PC se ve horizontal, en celular las tarjetas superiores van apiladas limpiamente y el teléfono se ajusta */
+        /* Media Queries */
         @media (max-width: 600px) {
             body { padding: 12px; }
             .page { margin: 12px auto; border-radius: 8px; }
             .page-content { padding: 16px; }
             header { padding: 16px; flex-direction: column; gap: 10px; text-align: center; }
-            
-            /* Tarjetas superiores en columna vertical para móviles (evita aplastamiento) */
             .summary-grid { grid-template-columns: 1fr; gap: 10px; }
-            
             .timeline-content { flex-direction: column; align-items: flex-start; gap: 6px; }
             .timeline-amount { text-align: left; }
             .contact-grid { grid-template-columns: 1fr; }
-            
-            /* Ajuste específico para que el número de WhatsApp no se corte feo */
             .contact-box.whatsapp { font-size: 0.9rem; letter-spacing: -0.2px; }
         }
 
@@ -134,6 +133,7 @@
             body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .page { border: none; box-shadow: none; margin: 0; max-width: 100%; page-break-after: always; }
             .accordion-content { display: block !important; }
+            .btn-pdf { display: none !important; } /* Oculta el botón en la impresión final */
         }
     </style>
 </head>
@@ -553,6 +553,11 @@
                         </a>
                     </div>
                 </div>
+
+                <!-- Botón de Descarga PDF al final (exactamente como pediste) -->
+                <button onclick="window.print()" class="btn-pdf">
+                    📥 Descargar cotización en PDF
+                </button>
             </div>
         </div>
 
