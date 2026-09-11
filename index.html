@@ -8,25 +8,26 @@
         :root {
             --primary-color: #143A2B;
             --primary-dark: #0F1A14;
-            --bg-color: #fcfbf9;
+            --bg-color: #f4f5f2;
             --card-bg: #ffffff;
-            --text-main: #111827;
-            --text-muted: #6b7280;
-            --border-color: #e5e7eb;
-            --accent-green: #f0fdf4;
-            --border-green: #bbf7d0;
-            --text-green: #166534;
+            --text-main: #0F1A14;
+            --text-muted: #7A8278;
+            --border-color: #e7e9e4;
+            --accent-green: #ecfccb;
+            --border-green: #d9f0b8;
+            --text-green: #2E6B4F;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.5; padding-bottom: 40px; }
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.5; padding: 12px; }
         
+        /* Contenedor principal idéntico a Aduanex (Fluido y adaptable) */
         .page {
-            max-width: 900px;
-            margin: 32px auto;
+            max-width: 720px;
+            margin: 20px auto;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(15, 26, 20, 0.04);
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -34,107 +35,80 @@
             page-break-after: always;
         }
 
-        /* Encabezado actualizado con el degradado idéntico al logo de Aduanex */
-        header { background: linear-gradient(120deg, rgb(20, 58, 43), rgb(15, 26, 20)); color: white; padding: 20px 32px; display: flex; justify-content: space-between; align-items: center; }
-        .logo-container img { height: 65px; object-fit: contain; }
+        /* Encabezado con degradado exacto */
+        header { background: linear-gradient(120deg, rgb(20, 58, 43), rgb(15, 26, 20)); color: white; padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .logo-container img { height: 48px; object-fit: contain; }
         .header-title { font-size: 1.1rem; font-weight: 500; letter-spacing: 0.5px; opacity: 0.9; }
 
-        .page-content { padding: 32px; flex-grow: 1; }
+        .page-content { padding: 24px; flex-grow: 1; }
         
         .client-info { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; font-weight: 500; }
-        .client-info span { color: var(--text-main); font-weight: 600; }
+        .client-info span { color: var(--text-main); font-weight: 700; }
 
-        .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
-        
-        /* Estilos de las tarjetas con íconos integrados */
-        .summary-card { background: #f9fafb; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; display: flex; align-items: center; gap: 12px; }
-        .summary-icon { background: var(--accent-green); color: var(--text-green); width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; border: 1px solid var(--border-green); }
-        .summary-info span { font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 2px; }
-        .summary-info strong { font-size: 1.05rem; color: var(--text-main); }
+        /* Grilla de tarjetas superiores adaptable (Pasa a 1 columna en móviles) */
+        .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
+        .summary-card { background: rgb(255, 255, 255); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 11px; }
+        .summary-icon { width: 34px; height: 34px; border-radius: 10px; background: var(--accent-green); color: var(--text-green); display: grid; place-items: center; flex-shrink: 0; }
+        .summary-info span { font-size: 11px; color: var(--text-muted); display: block; }
+        .summary-info strong { font-size: 15px; font-weight: 800; color: var(--text-main); }
 
-        .route-info { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; display: flex; justify-content: space-between; }
+        .route-info { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
         .route-info span { font-weight: 600; color: var(--text-main); }
 
-        .section-box { border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 20px; background: white; }
-        .box-title { font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+        .section-box { border: 1px solid var(--border-color); border-radius: 20px; padding: 24px 26px; margin-bottom: 20px; background: white; }
+        .box-title { font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px; }
         .box-desc { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; }
 
-        .product-item { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; }
-        .product-name { font-weight: 600; font-size: 0.95rem; color: var(--text-main); }
+        .product-item { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; gap: 12px; }
+        .product-name { font-weight: 700; font-size: 0.95rem; color: var(--text-main); }
         .product-detail { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
-        .product-price { font-weight: 700; font-size: 1rem; text-align: right; }
+        .product-price { font-weight: 800; font-size: 1rem; text-align: right; white-space: nowrap; }
 
         .metric-block { margin-bottom: 20px; }
         .metric-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
-        .metric-value { font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-top: 2px; }
+        .metric-value { font-size: 2.2rem; font-weight: 800; color: var(--text-main); margin-top: 2px; letter-spacing: -0.03em; }
         .metric-sub { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
 
-        .recupero-banner { background-color: var(--accent-green); border: 1px solid var(--border-green); border-radius: 8px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; margin-top: 20px; }
-        .recupero-icon { background: #dcfce7; color: var(--text-green); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
-        .recupero-text strong { font-size: 0.9rem; color: var(--text-green); display: block; }
-        .recupero-text span { font-size: 0.8rem; color: #15803d; }
+        .recupero-banner { background-color: var(--accent-green); border: 1px solid var(--border-green); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; margin-top: 16px; }
+        .recupero-icon { background: #ffffff; color: var(--text-green); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; border: 1px solid var(--border-green); }
+        .recupero-text strong { font-size: 0.9rem; color: var(--primary-color); display: block; }
+        .recupero-text span { font-size: 0.8rem; color: var(--text-green); }
 
-        /* Botón de Descarga PDF */
-        .btn-pdf { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; background: #ffffff; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; font-weight: 600; font-size: 0.9rem; color: var(--text-main); cursor: pointer; text-decoration: none; margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,0.02); transition: background 0.2s; }
-        .btn-pdf:hover { background: #f9fafb; }
-
-        /* Acordeones y líneas de tiempo */
-        .accordion-item { border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 12px; background: white; overflow: hidden; }
+        /* Acordeones interactivos */
+        .accordion-item { border: 1px solid var(--border-color); border-radius: 14px; margin-bottom: 12px; background: white; overflow: hidden; }
         .accordion-header { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 16px; background: #fff; border: none; cursor: pointer; text-align: left; }
         .accordion-header:hover { background: #f9fafb; }
         .accordion-title { font-weight: 700; font-size: 0.95rem; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
         .accordion-subtitle { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
-        .accordion-price { font-weight: 700; font-size: 1rem; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
-        .accordion-content { display: none; padding: 16px; background: #fcfbf9; border-top: 1px solid var(--border-color); }
-        .sub-row { display: flex; justify-content: space-between; font-size: 0.88rem; padding: 8px 0; border-bottom: 1px dashed var(--border-color); color: var(--text-muted); }
+        .accordion-price { font-weight: 800; font-size: 1rem; color: var(--text-main); display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+        .accordion-content { display: none; padding: 16px; background: #fafbf8; border-top: 1px solid var(--border-color); }
+        .sub-row { display: flex; justify-content: space-between; font-size: 0.88rem; padding: 8px 0; border-bottom: 1px dashed var(--border-color); color: var(--text-muted); gap: 10px; }
         .sub-row:last-child { border-bottom: none; }
-        .sub-row span:last-child { font-weight: 600; color: var(--text-main); }
+        .sub-row span:last-child { font-weight: 600; color: var(--text-main); text-align: right; }
 
-        /* Timeline / Etapas con montos alineados a la derecha */
-        .timeline-container { position: relative; padding-left: 10px; }
-        .timeline-step { display: flex; gap: 16px; margin-bottom: 24px; position: relative; align-items: flex-start; }
-        .timeline-step:not(:last-child)::before { content: ''; position: absolute; left: 15px; top: 32px; bottom: -28px; width: 2px; background: var(--border-green); }
-        .timeline-number { background: var(--accent-green); color: var(--text-green); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; flex-shrink: 0; border: 1px solid var(--border-green); }
-        .timeline-content { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; width: 100%; }
-        .timeline-text { flex-grow: 1; }
-        .timeline-text h4 { font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 2px; }
-        .timeline-text p { font-size: 0.83rem; color: var(--text-muted); }
-        .timeline-text .time-badge { font-size: 0.8rem; color: var(--text-green); font-weight: 600; margin-top: 4px; display: inline-block; }
-        .timeline-amount { font-weight: 800; font-size: 1rem; color: var(--text-main); text-align: right; white-space: nowrap; }
+        /* Botón PDF */
+        .btn-pdf { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; background: #ffffff; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; font-weight: 700; font-size: 0.9rem; color: var(--text-main); cursor: pointer; text-decoration: none; margin-bottom: 20px; transition: background 0.2s; }
+        .btn-pdf:hover { background: #f9fafb; }
 
-        /* Tarjeta oscura "Empecemos" */
-        .dark-card { background: linear-gradient(135deg, #0F1A14, #143A2B); color: white; border-radius: 16px; padding: 28px; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(20, 58, 43, 0.2); }
-        .dark-card h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; }
-        .dark-card p { font-size: 0.9rem; color: #d1d5db; margin-bottom: 16px; line-height: 1.4; }
-        .feature-list { list-style: none; margin-bottom: 24px; }
-        .feature-list li { font-size: 0.88rem; color: #e5e7eb; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-        .feature-list li span { color: #4ade80; font-weight: bold; }
-        .btn-confirm { background: #bbf7d0; color: #143A2B; border: none; padding: 14px 24px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; transition: background 0.2s; }
-        .btn-confirm:hover { background: #86efac; }
+        footer { text-align: center; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding: 20px; line-height: 1.5; background: #fafbf8; }
+        footer div { margin-top: 4px; font-size: 0.75rem; }
 
-        /* Contacto Grid Optimizado */
-        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 10px; }
-        .contact-box { background: #f9fafb; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px 10px; text-align: center; text-decoration: none; color: var(--text-main); display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; font-size: 0.85rem; }
-        .contact-box.whatsapp { background: #f0fdf4; border-color: #bbf7d0; color: #15803d; }
-
-        footer { text-align: center; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding: 16px 20px; line-height: 1.4; background: #f9fafb; }
-        footer div { margin-top: 2px; font-size: 0.75rem; }
-
-        /* Media Queries */
+        /* Media Queries Responsivas exactas para celulares */
         @media (max-width: 600px) {
-            body { padding: 12px; }
-            .page { margin: 12px auto; border-radius: 8px; }
+            body { padding: 6px; }
+            .page { margin: 8px auto; border-radius: 14px; }
             .page-content { padding: 16px; }
-            header { padding: 16px; flex-direction: column; gap: 10px; text-align: center; }
-            .summary-grid { grid-template-columns: 1fr; gap: 10px; }
-            .timeline-content { flex-direction: column; align-items: flex-start; gap: 6px; }
-            .timeline-amount { text-align: left; }
-            .contact-grid { grid-template-columns: 1fr; }
-            .contact-box.whatsapp { font-size: 0.9rem; letter-spacing: -0.2px; }
+            header { padding: 16px; flex-direction: column; align-items: flex-start; }
+            .summary-grid { grid-template-columns: 1fr; gap: 8px; }
+            .metric-value { font-size: 1.8rem; }
+            .product-item { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .product-price { text-align: left; }
+            .accordion-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .accordion-price { width: 100%; justify-content: space-between; }
         }
 
         @media print {
-            body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            body { background: white; padding: 0; }
             .page { border: none; box-shadow: none; margin: 0; max-width: 100%; page-break-after: always; }
             .accordion-content { display: block !important; }
             .btn-pdf { display: none !important; }
@@ -158,7 +132,7 @@
                     Preparada para <span>Jose Argentiro</span> · 7 de septiembre, 2026
                 </div>
 
-                <!-- Tarjetas superiores con íconos agregados -->
+                <!-- Tarjetas superiores -->
                 <div class="summary-grid">
                     <div class="summary-card">
                         <div class="summary-icon">⚖️</div>
@@ -227,7 +201,7 @@
         </div>
 
         <footer>
-            Valores sujetos a variación del tipo de cambio al momento সম্প্রদ de pago
+            Valores sujetos a variación del tipo de cambio al momento del pago · Cotización en USD referencial
             <div>puntoAR | empresa.puntoAR@gmail.com | +54 9 2266 41-5498</div>
         </footer>
     </div>
@@ -244,7 +218,7 @@
 
             <div class="page-content">
                 <div style="margin-bottom: 24px;">
-                    <h3 style="font-size: 1.1rem; margin-bottom: 14px; font-weight: 700;">Desglose por concepto</h3>
+                    <h3 style="font-size: 1.1rem; margin-bottom: 14px; font-weight: 800;">Desglose por concepto</h3>
 
                     <!-- 1. Mercadería (FOB) -->
                     <div class="accordion-item">
@@ -349,225 +323,14 @@
                 </div>
 
                 <!-- Total de la cotización -->
-                <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 14px; padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
                     <div>
                         <strong style="font-size: 1.1rem; color: var(--primary-dark);">Total cotización</strong>
                         <p style="font-size: 0.8rem; color: var(--text-muted);">Suma total de conceptos de la importación</p>
                     </div>
                     <div style="font-size: 1.6rem; font-weight: 800; color: var(--primary-color);">USD $10,105.48</div>
                 </div>
-            </div>
-        </div>
 
-        <footer>
-            Valores sujetos a variación del tipo de cambio al momento del pago
-            <div>puntoAR | empresa.puntoAR@gmail.com | +54 9 2266 41-5498</div>
-        </footer>
-    </div>
-
-    <!-- ================= PÁGINA 3: CÓMO SE PAGA (ETAPAS) ================= -->
-    <div class="page">
-        <div>
-            <header>
-                <div class="logo-container">
-                    <img src="puntoAR_logo_placa_blanca_alargada2.png" alt="PuntoAR Logo">
-                </div>
-                <div class="header-title">Plan de Pagos</div>
-            </header>
-
-            <div class="page-content">
-                <div class="section-box">
-                    <div class="box-title" style="font-size: 1.2rem; margin-bottom: 6px;">Cómo se paga</div>
-                    <div class="box-desc" style="margin-bottom: 24px;">El costo total se paga en etapas, a medida que avanza tu importación.</div>
-
-                    <!-- Lista de pagos por etapas con montos alineados a la derecha -->
-                    <div class="timeline-container">
-                        <div class="timeline-step">
-                            <div class="timeline-number">1</div>
-                            <div class="timeline-content">
-                                <div class="timeline-text">
-                                    <h4>Confirmación de operación</h4>
-                                    <p>Sale del Servicio puntoAR: no es un costo aparte, es el primer tramo de lo que ya está en el total.</p>
-                                    <span class="time-badge">Al aceptar la cotización</span>
-                                </div>
-                                <div class="timeline-amount">USD $300.00</div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-step">
-                            <div class="timeline-number">2</div>
-                            <div class="timeline-content">
-                                <div class="timeline-text">
-                                    <h4>Pago de mercadería</h4>
-                                    <p>El pago de tu mercadería al proveedor, al confirmar la orden con la fábrica.</p>
-                                    <span class="time-badge" style="color: var(--text-muted);">Fecha estimada · 15 sep</span>
-                                </div>
-                                <div class="timeline-amount">USD $1,920.00</div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-step">
-                            <div class="timeline-number">3</div>
-                            <div class="timeline-content">
-                                <div class="timeline-text">
-                                    <h4>Certificaciones</h4>
-                                    <p>Trámites y homologaciones que requiere tu producto.</p>
-                                    <span class="time-badge" style="color: var(--text-muted);">Fecha estimada · 10 oct</span>
-                                </div>
-                                <div class="timeline-amount">USD $1,900.00</div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-step">
-                            <div class="timeline-number">4</div>
-                            <div class="timeline-content">
-                                <div class="timeline-text">
-                                    <h4>VEP de Aduana</h4>
-                                    <p>Los impuestos de la importación, que se pagan al nacionalizar.</p>
-                                    <span class="time-badge" style="color: var(--text-muted);">Fecha estimada · 20 oct</span>
-                                </div>
-                                <div class="timeline-amount">USD $2,128.18</div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-step">
-                            <div class="timeline-number">5</div>
-                            <div class="timeline-content">
-                                <div class="timeline-text">
-                                    <h4>Liquidación final</h4>
-                                    <p>Flete internacional, gastos en destino y el resto del Servicio puntoAR.</p>
-                                    <span class="time-badge" style="color: var(--text-muted);">Fecha estimada · 25 oct</span>
-                                </div>
-                                <div class="timeline-amount">USD $3,857.30</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Total box menor -->
-                    <div style="background: #f9fafb; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; margin-top: 24px; display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <strong style="font-size: 1rem; color: var(--text-main);">Total</strong>
-                            <p style="font-size: 0.78rem; color: var(--text-muted);">Las fechas son estimadas. Los montos son de esta cotización: no se suma nada por pagar en etapas.</p>
-                        </div>
-                        <div style="font-size: 1.4rem; font-weight: 800; color: var(--primary-color);">USD $10,105.48</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <footer>
-            Valores sujetos a variación del tipo de cambio al momento del pago
-            <div>puntoAR | empresa.puntoAR@gmail.com | +54 9 2266 41-5498</div>
-        </footer>
-    </div>
-
-    <!-- ================= PÁGINA 4: QUÉ PASA DESPUÉS Y EMPECEMOS ================= -->
-    <div class="page">
-        <div>
-            <header>
-                <div class="logo-container">
-                    <img src="puntoAR_logo_placa_blanca_alargada2.png" alt="PuntoAR Logo">
-                </div>
-                <div class="header-title">Próximos Pasos</div>
-            </header>
-
-            <div class="page-content">
-                <!-- ¿Qué pasa después? -->
-                <div class="section-box" style="margin-bottom: 24px;">
-                    <div class="box-title" style="font-size: 1.1rem; margin-bottom: 4px;">¿Qué pasa después?</div>
-                    <div class="box-desc" style="margin-bottom: 20px;">Así sigue tu importación marítima una vez que aceptás.</div>
-
-                    <div class="timeline-container">
-                        <div class="timeline-step">
-                            <div class="timeline-number">1</div>
-                            <div class="timeline-content">
-                                <div class="timeline-text">
-                                    <h4>Aceptás la cotización</h4>
-                                    <p>Te registrás en el HUB y confirmás que querés avanzar.</p>
-                                    <span class="time-badge">Hoy</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-step">
-                            <div class="timeline-number">2</div>
-                            <div class="timeline-content">
-                                <div class="timeline-text">
-                                    <h4>Coordinamos el pago</h4>
-                                    <p>Te contactamos por WhatsApp para coordinar el adelanto y los tiempos.</p>
-                                    <span class="time-badge" style="color: var(--text-muted);">1–2 días</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-step">
-                            <div class="timeline-number">3</div>
-                            <div class="timeline-content">
-                                <div class="timeline-text">
-                                    <h4>Tu carga sale en barco</h4>
-                                    <p>Gestionamos con la fábrica y el forwarder. Seguís todo desde el HUB.</p>
-                                    <span class="time-badge" style="color: var(--text-muted);">Según producción</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-step">
-                            <div class="timeline-number">4</div>
-                            <div class="timeline-content">
-                                <div class="timeline-text">
-                                    <h4>Nacionalización en Argentina</h4>
-                                    <p>Despacho aduanero, pago de impuestos y liberación de la carga.</p>
-                                    <span class="time-badge" style="color: var(--text-muted);">45–60 días</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-step">
-                            <div class="timeline-number">5</div>
-                            <div class="timeline-content">
-                                <div class="timeline-text">
-                                    <h4>Entrega</h4>
-                                    <p>Coordinamos la entrega final de tu mercadería.</p>
-                                    <span class="time-badge" style="color: var(--text-muted);">Al liberar</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tarjeta Oscura Empecemos -->
-                <div class="dark-card">
-                    <span style="font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; color: #4ade80; text-transform: uppercase; display: block; margin-bottom: 4px;">Empecemos</span>
-                    <h3>USD $300.00 para arrancar tu importación</h3>
-                    <p>Salen del Servicio puntoAR, que ya está dentro del total de arriba: <strong>no es un costo extra</strong>, es el primer tramo de lo que ya cotizamos.</p>
-                    
-                    <ul class="feature-list">
-                        <li><span>✓</span> Arrancamos la coordinación de la mercadería con la fábrica</li>
-                        <li><span>✓</span> Abrimos un grupo con vos y el proveedor para hablar todos en el mismo lugar</li>
-                    </ul>
-
-                    <a href="https://wa.me/5492266415498" target="_blank" class="btn-confirm">
-                        → Confirmar y arrancar
-                    </a>
-                    <div style="font-size: 0.78rem; color: #9ca3af; margin-top: 12px;">
-                        Te abrimos WhatsApp con nuestro equipo para coordinar el pago. Inmediatamente se acredita, tu importación arranca.
-                    </div>
-                </div>
-
-                <!-- Bloque de Dudas / Contacto -->
-                <div class="section-box" style="text-align: center; padding: 20px;">
-                    <div style="font-weight: 700; font-size: 1rem; margin-bottom: 12px;">¿Tenés dudas? Contactanos</div>
-                    <div class="contact-grid">
-                        <a href="https://wa.me/5492266415498" class="contact-box whatsapp">
-                            💬 +54 9 2266 41-5498
-                        </a>
-                        <a href="mailto:empresa.puntoAR@gmail.com" class="contact-box">
-                            ✉️ empresa.puntoAR@gmail.com
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Botón de Descarga PDF al final -->
                 <button onclick="guardarPDF()" class="btn-pdf">
                     📥 Descargar cotización en PDF
                 </button>
@@ -594,17 +357,7 @@
         }
 
         function guardarPDF() {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Cotización de Importación - PuntoAR',
-                    text: 'Revisá los detalles de tu cotización de importación.',
-                    url: window.location.href
-                }).catch(() => {
-                    window.print();
-                });
-            } else {
-                window.print();
-            }
+            window.print();
         }
     </script>
 </body>
