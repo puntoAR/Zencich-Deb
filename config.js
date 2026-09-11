@@ -2,7 +2,7 @@
 const CONFIG = {
     cantidadInicial: 4,
     precioUnitarioFOB: 480.00,
-    servicioPuntoARBase: 1436.34,
+    servicioPuntoARBase: parseFloat(localStorage.getItem('puntoAR_servicio')) || 2138.238,
     fleteSeguroBase: 710.80,
     gastosDestinoBase: 2201.95,
     certificacionesBase: 1900.00,
