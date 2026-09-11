@@ -43,7 +43,6 @@
         .client-info { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; font-weight: 500; }
         .client-info span { color: var(--text-main); font-weight: 700; }
 
-        /* Grilla superior adaptada */
         .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
         .summary-card { background: rgb(255, 255, 255); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 11px; }
         .summary-icon { width: 34px; height: 34px; border-radius: 10px; background: var(--accent-green); color: var(--text-green); display: grid; place-items: center; flex-shrink: 0; }
@@ -57,10 +56,17 @@
         .box-title { font-size: 13.5px; font-weight: 800; color: var(--text-main); margin-bottom: 2px; }
         .box-desc { font-size: 12.5px; color: var(--text-muted); margin-bottom: 18px; }
 
-        .product-item { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--border-color); }
+        .product-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid var(--border-color); }
         .product-name { font-weight: 700; font-size: 13px; color: var(--text-main); }
         .product-detail { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
-        .product-price { font-weight: 700; font-size: 13.5px; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+        
+        /* Control interactivo de cantidad */
+        .qty-control { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+        .qty-btn { background: var(--border-color); border: none; width: 22px; height: 22px; border-radius: 4px; font-weight: bold; cursor: pointer; display: grid; place-items: center; }
+        .qty-btn:hover { background: #d1d5db; }
+        .qty-input { width: 36px; text-align: center; font-size: 12px; font-weight: 700; border: 1px solid var(--border-color); border-radius: 4px; padding: 2px; }
+
+        .product-price { font-weight: 800; font-size: 14px; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
 
         .metric-block { margin-bottom: 20px; }
         .metric-label { font-size: 14px; color: var(--text-muted); margin-bottom: 4px; }
@@ -83,6 +89,13 @@
         .sub-row { display: flex; justify-content: space-between; font-size: 0.88rem; padding: 8px 0; border-bottom: 1px dashed var(--border-color); color: var(--text-muted); gap: 10px; }
         .sub-row:last-child { border-bottom: none; }
         .sub-row span:last-child { font-weight: 600; color: var(--text-main); text-align: right; }
+
+        /* Sistema de Notificaciones Toast Flotantes */
+        #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+        .toast { background: #0F1A14; color: #fff; padding: 12px 20px; border-radius: 12px; font-size: 13px; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.15); animation: fadeUp 0.3s ease; display: flex; align-items: center; gap: 8px; }
+        .toast span { color: #A3E635; }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Línea de tiempo / Pasos */
         .timeline-container { position: relative; padding-left: 0px; }
@@ -117,7 +130,6 @@
         footer { text-align: center; font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--border-color); padding: 20px; line-height: 1.5; background: #fafbf8; }
         footer div { margin-top: 4px; font-size: 11.5px; }
 
-        /* Media Queries optimizadas para celulares idénticas a Aduanex */
         @media (max-width: 600px) {
             body { padding: 4px; }
             .page { margin: 6px auto; border-radius: 12px; }
@@ -144,6 +156,9 @@
 </head>
 <body>
 
+    <!-- Contenedor de notificaciones Toast -->
+    <div id="toast-container"></div>
+
     <!-- ================= PÁGINA 1: RESUMEN EJECUTIVO ================= -->
     <div class="page">
         <div>
@@ -165,14 +180,14 @@
                         <div class="summary-icon">⚖️</div>
                         <div class="summary-info">
                             <span>Peso total</span>
-                            <strong>360 kg</strong>
+                            <strong id="lbl-peso">360 kg</strong>
                         </div>
                     </div>
                     <div class="summary-card">
                         <div class="summary-icon">📦</div>
                         <div class="summary-info">
                             <span>Volumen</span>
-                            <strong>4,7 CBM</strong>
+                            <strong id="lbl-vol">4,7 CBM</strong>
                         </div>
                     </div>
                     <div class="summary-card">
@@ -192,35 +207,41 @@
 
                     <div style="margin-bottom: 18px;">
                         <div class="box-title">Precio de los productos</div>
-                        <div class="box-desc">Lo que le pagás a la fábrica (FOB). Todavía sin flete, impuestos ni gastos.</div>
+                        <div class="box-desc">Lo que le pagás a la fábrica (FOB). Modificá las unidades para recalcular al vuelo.</div>
 
                         <div class="product-item">
                             <div>
                                 <div class="product-name">Silla de estética E019-2</div>
-                                <div class="product-detail">4 uds × USD $480.00</div>
+                                <div class="product-detail">NCM 9402.10.00.100L</div>
+                                <div class="qty-control">
+                                    <button class="qty-btn" onclick="cambiarCantidad(-1)">-</button>
+                                    <input type="text" id="input-qty" class="qty-input" value="4" readonly>
+                                    <button class="qty-btn" onclick="cambiarCantidad(1)">+</button>
+                                    <span style="font-size: 11.5px; color: var(--text-muted); margin-left: 4px;">uds (USD $480 c/u)</span>
+                                </div>
                             </div>
-                            <div class="product-price">USD $1,920.00</div>
+                            <div class="product-price" id="val-fob-item">USD $1,920.00</div>
                         </div>
                     </div>
 
                     <div class="metric-block" style="border-bottom: 1px solid var(--border-color); padding-bottom: 20px; margin-bottom: 20px;">
                         <div class="metric-label">Costo de los productos</div>
-                        <div class="metric-value">USD $1,920.00</div>
-                        <div class="metric-sub">≈ $ 2.937.600</div>
+                        <div class="metric-value" id="val-fob-total">USD $1,920.00</div>
+                        <div class="metric-sub" id="val-ars-fob">≈ $ 2.937.600</div>
                         <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;">El valor de la mercadería</div>
                     </div>
 
                     <div class="metric-block">
                         <div class="metric-label">Costos de importación</div>
-                        <div class="metric-value" style="color: var(--primary-color);">USD $7,898.27</div>
-                        <div class="metric-sub">≈ $ 12.084.353</div>
+                        <div class="metric-value" style="color: var(--primary-color);" id="val-import-total">USD $7,898.27</div>
+                        <div class="metric-sub" id="val-ars-import">≈ $ 12.084.353</div>
                         <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;">Flete, seguro, impuestos, gastos y nuestro servicio</div>
 
                         <!-- Banner de Recupero -->
                         <div class="recupero-banner">
                             <div class="recupero-icon">↺</div>
                             <div class="recupero-text">
-                                <strong>Tu costo de importación real es USD $6,322.55</strong>
+                                <strong id="val-real-import">Tu costo de importación real es USD $6,322.55</strong>
                                 <span>Ya descontado el recupero de impuestos</span>
                             </div>
                         </div>
@@ -256,10 +277,10 @@
                                 <div class="accordion-title">📦 Mercadería (FOB)</div>
                                 <div class="accordion-subtitle">Lo que le pagás a la fábrica</div>
                             </div>
-                            <div class="accordion-price">USD $1,920.00 <span style="font-size:0.8rem">▼</span></div>
+                            <div class="accordion-price"><span id="acc-fob">USD $1,920.00</span> <span style="font-size:0.8rem">▼</span></div>
                         </button>
                         <div id="fob-content" class="accordion-content">
-                            <div class="sub-row"><span>Silla de estética E019-2 (4 uds)</span><span>USD $1,920.00</span></div>
+                            <div class="sub-row"><span id="sub-item-desc">Silla de estética E019-2 (4 uds)</span><span id="sub-item-val">USD $1,920.00</span></div>
                         </div>
                     </div>
 
@@ -270,11 +291,11 @@
                                 <div class="accordion-title">⚓ Flete y seguro marítimo</div>
                                 <div class="accordion-subtitle">Marítimo · traer la carga hasta destino</div>
                             </div>
-                            <div class="accordion-price">USD $710.80 <span style="font-size:0.8rem">▼</span></div>
+                            <div class="accordion-price"><span id="acc-flete">USD $710.80</span> <span style="font-size:0.8rem">▼</span></div>
                         </button>
                         <div id="flete-content" class="accordion-content">
-                            <div class="sub-row"><span>Flete internacional</span><span>USD $684.75</span></div>
-                            <div class="sub-row"><span>Seguro internacional</span><span>USD $26.05</span></div>
+                            <div class="sub-row"><span>Flete internacional</span><span id="sub-flete-int">USD $684.75</span></div>
+                            <div class="sub-row"><span>Seguro internacional</span><span id="sub-seguro">USD $26.05</span></div>
                         </div>
                     </div>
 
@@ -285,15 +306,15 @@
                                 <div class="accordion-title">📋 Impuestos de importación</div>
                                 <div class="accordion-subtitle">Arancel, tasa, IVA y percepciones · parte recuperable</div>
                             </div>
-                            <div class="accordion-price">USD $2,128.18 <span style="font-size:0.8rem">▼</span></div>
+                            <div class="accordion-price"><span id="acc-imp">USD $2,128.18</span> <span style="font-size:0.8rem">▼</span></div>
                         </button>
                         <div id="impuestos-content" class="accordion-content">
-                            <div class="sub-row"><span>Derechos de importación (arancel)</span><span>USD $473.54</span></div>
-                            <div class="sub-row"><span>Tasa estadística</span><span>USD $78.92</span></div>
-                            <div class="sub-row"><span>IVA</span><span>USD $668.49</span></div>
-                            <div class="sub-row"><span>IVA adicional</span><span>USD $636.65</span></div>
-                            <div class="sub-row"><span>Percepción IIBB</span><span>USD $79.58</span></div>
-                            <div class="sub-row"><span>Percepción Ganancias</span><span>USD $191.00</span></div>
+                            <div class="sub-row"><span>Derechos de importación (arancel)</span><span id="imp-1">USD $473.54</span></div>
+                            <div class="sub-row"><span>Tasa estadística</span><span id="imp-2">USD $78.92</span></div>
+                            <div class="sub-row"><span>IVA</span><span id="imp-3">USD $668.49</span></div>
+                            <div class="sub-row"><span>IVA adicional</span><span id="imp-4">USD $636.65</span></div>
+                            <div class="sub-row"><span>Percepción IIBB</span><span id="imp-5">USD $79.58</span></div>
+                            <div class="sub-row"><span>Percepción Ganancias</span><span id="imp-6">USD $191.00</span></div>
                         </div>
                     </div>
 
@@ -304,7 +325,7 @@
                                 <div class="accordion-title">🏢 Gastos en destino</div>
                                 <div class="accordion-subtitle">Puerto, terminal, transporte y despacho</div>
                             </div>
-                            <div class="accordion-price">USD $2,201.95 <span style="font-size:0.8rem">▼</span></div>
+                            <div class="accordion-price"><span id="acc-gastos">USD $2,201.95</span> <span style="font-size:0.8rem">▼</span></div>
                         </button>
                         <div id="gastos-content" class="accordion-content">
                             <div class="sub-row"><span>Tasa AGP (LCL)</span><span>USD $18.89</span></div>
@@ -314,7 +335,7 @@
                             <div class="sub-row"><span>Gastos operativos</span><span>USD $300.00</span></div>
                             <div class="sub-row"><span>Desconsolidación</span><span>USD $118.06</span></div>
                             <div class="sub-row"><span>Emisión BL</span><span>USD $65.00</span></div>
-                            <div class="sub-row"><span>Depósito fiscal LCL 0 - 5 m³</span><span>USD $865.00</span></div>
+                            <div class="sub-row"><span>Depósito fiscal LCL 0 - 5 m³</span><span id="gastos-dep">USD $865.00</span></div>
                             <div class="sub-row"><span>Entrega LCL 0 - 5 m³</span><span>USD $165.00</span></div>
                             <div class="sub-row"><span>Aduana y liberación</span><span>USD $350.00</span></div>
                         </div>
@@ -342,10 +363,10 @@
                                 <div class="accordion-title">⚙️ Servicio puntoAR</div>
                                 <div class="accordion-subtitle">Gestión, coordinación y despacho de tu operación</div>
                             </div>
-                            <div class="accordion-price">USD $1,244.55 <span style="font-size:0.8rem">▼</span></div>
+                            <div class="accordion-price"><span id="acc-serv">USD $1,244.55</span> <span style="font-size:0.8rem">▼</span></div>
                         </button>
                         <div id="aduanex-content" class="accordion-content">
-                            <div class="sub-row"><span>Gestión y coordinación de la operación</span><span>USD $1,244.55</span></div>
+                            <div class="sub-row"><span>Gestión y coordinación de la operación</span><span id="serv-val">USD $1,244.55</span></div>
                         </div>
                     </div>
 
@@ -357,7 +378,7 @@
                         <strong style="font-size: 1.1rem; color: var(--primary-dark);">Total cotización</strong>
                         <p style="font-size: 0.8rem; color: var(--text-muted);">Suma total de conceptos de la importación</p>
                     </div>
-                    <div style="font-size: 1.6rem; font-weight: 800; color: var(--primary-color);">USD $10,105.48</div>
+                    <div style="font-size: 1.6rem; font-weight: 800; color: var(--primary-color);" id="val-total-general">USD $10,105.48</div>
                 </div>
             </div>
         </div>
@@ -404,7 +425,7 @@
                                     <p>El pago de tu mercadería al proveedor, al confirmar la orden con la fábrica.</p>
                                     <span class="time-badge" style="color: var(--text-muted);">Fecha estimada · 16 sep</span>
                                 </div>
-                                <div class="timeline-amount">USD $1,920.00</div>
+                                <div class="timeline-amount" id="t-step-2">USD $1,920.00</div>
                             </div>
                         </div>
 
@@ -428,7 +449,7 @@
                                     <p>Los impuestos de la importación, que se pagan al nacionalizar.</p>
                                     <span class="time-badge" style="color: var(--text-muted);">Fecha estimada · 21 oct</span>
                                 </div>
-                                <div class="timeline-amount">USD $2,128.18</div>
+                                <div class="timeline-amount" id="t-step-4">USD $2,128.18</div>
                             </div>
                         </div>
 
@@ -440,7 +461,7 @@
                                     <p>Flete internacional, gastos en destino y el resto del Servicio puntoAR.</p>
                                     <span class="time-badge" style="color: var(--text-muted);">Fecha estimada · 26 oct</span>
                                 </div>
-                                <div class="timeline-amount">USD $3,570.09</div>
+                                <div class="timeline-amount" id="t-step-5">USD $3,570.09</div>
                             </div>
                         </div>
                     </div>
@@ -450,7 +471,7 @@
                             <strong style="font-size: 1rem; color: var(--text-main);">Total</strong>
                             <p style="font-size: 0.78rem; color: var(--text-muted);">Las fechas son estimadas. Los montos son de esta cotización: no se suma nada por pagar en etapas.</p>
                         </div>
-                        <div style="font-size: 1.4rem; font-weight: 800; color: var(--primary-color);">USD $10,105.48</div>
+                        <div style="font-size: 1.4rem; font-weight: 800; color: var(--primary-color);" id="t-total-general">USD $10,105.48</div>
                     </div>
                 </div>
             </div>
@@ -546,7 +567,7 @@
                         <li><span>✓</span> Abrimos un grupo con vos y el proveedor para hablar todos en el mismo lugar</li>
                     </ul>
 
-                    <a href="https://wa.me/5492266415498" target="_blank" class="btn-confirm">
+                    <a href="https://wa.me/5492266415498" target="_blank" class="btn-confirm" onclick="mostrarToast('Redirigiendo a WhatsApp de PuntoAR...')">
                         → Confirmar y arrancar
                     </a>
                     <div style="font-size: 12px; color: #94a39a; margin-top: 12px;">
@@ -558,7 +579,7 @@
                 <div class="section-box" style="text-align: center; padding: 20px;">
                     <div style="font-weight: 700; font-size: 1rem; margin-bottom: 12px;">¿Tenés dudas? Contactanos</div>
                     <div class="contact-grid">
-                        <a href="https://wa.me/5492266415498" class="contact-box whatsapp">
+                        <a href="https://wa.me/5492266415498" class="contact-box whatsapp" onclick="mostrarToast('Abriendo chat de soporte...')">
                             💬 +54 9 2266 41-5498
                         </a>
                         <a href="mailto:empresa.puntoAR@gmail.com" class="contact-box">
@@ -581,6 +602,74 @@
     </div>
 
     <script>
+        // Sistema de Notificaciones Toast
+        function mostrarToast(mensaje) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<span>✓</span> ${mensaje}`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Recálculo dinámico de cantidades
+        let cantidadUnidades = 4;
+        const precioUnitarioFOB = 480.00;
+
+        function cambiarCantidad(cambio) {
+            cantidadUnidades += cambio;
+            if (cantidadUnidades < 1) cantidadUnidades = 1;
+
+            document.getElementById('input-qty').value = cantidadUnidades;
+            
+            // Recálculos proporcionales
+            const nuevoFOB = cantidadUnidades * precioUnitarioFOB;
+            const nuevoArancel = nuevoFOB * 0.20;
+            const nuevaTasaEst = nuevoFOB * 0.033;
+            const nuevoIVA = (nuevoFOB + nuevoArancel + nuevaTasaEst) * 0.21;
+            const nuevoIVAAdd = nuevoFOB * 0.20;
+            const nuevaPercepcionIIBB = nuevoFOB * 0.025;
+            const nuevoGanancias = nuevoFOB * 0.06;
+            const nuevosImpuestos = nuevoArancel + nuevaTasaEst + nuevoIVA + nuevoIVAAdd + nuevaPercepcionIIBB + nuevoGanancias;
+            
+            const nuevoTotal = nuevoFOB + 710.80 + nuevosImpuestos + 2201.95 + 1900.00 + 1244.55;
+            const nuevoReal = nuevoTotal - (nuevoIVA + nuevoIVAAdd + nuevaPercepcionIIBB + nuevoGanancias);
+
+            // Actualizar etiquetas en pantalla
+            document.getElementById('val-fob-item').textContent = `USD $${nuevoFOB.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            document.getElementById('val-fob-total').textContent = `USD $${nuevoFOB.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            document.getElementById('val-ars-fob').textContent = `≈ $ ${(nuevoFOB * 1530).toLocaleString('es-AR')}`;
+            
+            document.getElementById('val-import-total').textContent = `USD $${nuevoTotal.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            document.getElementById('val-ars-import').textContent = `≈ $ ${(nuevoTotal * 1530).toLocaleString('es-AR')}`;
+            document.getElementById('val-real-import').textContent = `Tu costo de importación real es USD $${nuevoReal.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+
+            // Actualizar desglose
+            document.getElementById('acc-fob').textContent = `USD $${nuevoFOB.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            document.getElementById('sub-item-desc').textContent = `Silla de estética E019-2 (${cantidadUnidades} uds)`;
+            document.getElementById('sub-item-val').textContent = `USD $${nuevoFOB.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            
+            document.getElementById('acc-imp').textContent = `USD $${nuevosImpuestos.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            document.getElementById('imp-1').textContent = `USD $${nuevoArancel.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            document.getElementById('imp-2').textContent = `USD $${nuevaTasaEst.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            document.getElementById('imp-3').textContent = `USD $${nuevoIVA.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            document.getElementById('imp-4').textContent = `USD $${nuevoIVAAdd.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            document.getElementById('imp-5').textContent = `USD $${nuevaPercepcionIIBB.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            document.getElementById('imp-6').textContent = `USD $${nuevoGanancias.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+
+            document.getElementById('val-total-general').textContent = `USD $${nuevoTotal.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            
+            // Plan de pagos
+            document.getElementById('t-step-2').textContent = `USD $${nuevoFOB.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            document.getElementById('t-step-4').textContent = `USD $${nuevosImpuestos.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            document.getElementById('t-total-general').textContent = `USD $${nuevoTotal.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+
+            mostrarToast(`Cantidad actualizada a ${cantidadUnidades} unidades`);
+        }
+
         function toggleAccordion(id, btn) {
             const content = document.getElementById(id);
             const arrow = btn.querySelector('.accordion-price span');
@@ -594,7 +683,8 @@
         }
 
         function guardarPDF() {
-            window.print();
+            mostrarToast('Generando documento PDF...');
+            setTimeout(() => window.print(), 800);
         }
     </script>
 </body>
