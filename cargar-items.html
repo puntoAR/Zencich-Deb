@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculador Avanzado de Ítems - PuntoAR</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Contenedor de notificaciones Toast -->
+    <div id="toast-container"></div>
+
+    <div class="page" style="max-width: 800px; margin: 40px auto; padding: 20px;">
+        <header style="border-radius: 14px 14px 0 0;">
+            <div class="logo-container">
+                <img src="puntoAR_logo_placa_blanca_alargada2.png" alt="PuntoAR Logo">
+            </div>
+            <div class="header-title" style="font-size: 13.5px; color: rgb(148, 163, 154);">Calculador con Parámetros Normativos</div>
+        </header>
+
+        <div class="page-content">
+            <div class="section-box">
+                <div class="box-title" style="font-size: 1.1rem; margin-bottom: 6px;">Parámetros Fiscales y Regulatorios</div>
+                <div class="box-desc" style="margin-bottom: 20px;">Configurá los valores de la mercadería y las alícuotas o categorías de intervención aplicables.</div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                    <div>
+                        <label style="font-size: 12.5px; font-weight: 700; display: block; margin-bottom: 6px;">Valor FOB Total (USD)</label>
+                        <input type="number" id="input-fob" value="1920" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-weight: 700;" oninput="calcularDinamico()">
+                    </div>
+                    <div>
+                        <label style="font-size: 12.5px; font-weight: 700; display: block; margin-bottom: 6px;">Volumen (CBM)</label>
+                        <input type="number" id="input-cbm" value="4.7" step="0.1" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-weight: 700;" oninput="calcularDinamico()">
+                    </div>
+                    <div>
+                        <label style="font-size: 12.5px; font-weight: 700; display: block; margin-bottom: 6px;">Flete Internacional (USD)</label>
+                        <input type="number" id="input-flete" value="684.75" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-weight: 700;" oninput="calcularDinamico()">
+                    </div>
+                    <div>
+                        <label style="font-size: 12.5px; font-weight: 700; display: block; margin-bottom: 6px;">Arancel NCM Variable (%)</label>
+                        <input type="number" id="input-arancel-pct" value="24" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-weight: 700;" oninput="calcularDinamico()">
+                    </div>
+                    <div>
+                        <label style="font-size: 12.5px; font-weight: 700; display: block; margin-bottom: 6px;">Categoría ANMAT / Intervención</label>
+                        <select id="select-anmat" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-weight: 700; background: #fff;" onchange="calcularDinamico()">
+                            <option value="600">Estándar / Complejidad Baja (USD $600)</option>
+                            <option value="1200">Complejidad Alta / Múltiples productos (USD $1,200)</option>
+                            <option value="0">Sin intervención ANMAT (USD $0)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size: 12.5px; font-weight: 700; display: block; margin-bottom: 6px;">Certificación Seguridad Eléctrica</label>
+                        <select id="select-seguridad" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-weight: 700; background: #fff;" onchange="calcularDinamico()">
+                            <option value="1300">Completa / Ensayos de laboratorio (USD $1,300)</option>
+                            <option value="650">Simplificada / Homologación parcial (USD $650)</option>
+                            <option value="0">No requiere (USD $0)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size: 12.5px; font-weight: 700; display: block; margin-bottom: 6px;">Servicio PuntoAR (% del total)</label>
+                        <input type="number" id="input-servicio-pct" value="13.95" step="0.01" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-weight: 700;" oninput="calcularDinamico()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Desglose Completo por Conceptos -->
+            <div style="margin-bottom: 24px;">
+                <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 14px;">Desglose y Verificación de Componentes</h3>
+
+                <!-- 1. Mercadería FOB -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion('fob-content', this)">
+                        <div>
+                            <div class="accordion-title">📦 Mercadería (FOB)</div>
+                            <div class="accordion-subtitle">Lo que le pagás a la fábrica</div>
+                        </div>
+                        <div class="accordion-price"><span id="res-fob">USD $1,920.00</span> <span class="accordion-arrow" style="font-size:0.8rem">▼</span></div>
+                    </button>
+                    <div id="fob-content" class="accordion-content">
+                        <div class="sub-row"><span>Valor total de la mercadería declarada</span><span id="sub-fob-val">USD $1,920.00</span></div>
+                    </div>
+                </div>
+
+                <!-- 2. Flete y seguro marítimo -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion('flete-content', this)">
+                        <div>
+                            <div class="accordion-title">⚓ Flete y seguro marítimo</div>
+                            <div class="accordion-subtitle">Marítimo · traer la carga hasta destino</div>
+                        </div>
+                        <div class="accordion-price"><span id="res-flete-seguro">USD $710.80</span> <span class="accordion-arrow" style="font-size:0.8rem">▼</span></div>
+                    </button>
+                    <div id="flete-content" class="accordion-content">
+                        <div class="sub-row"><span>Flete internacional</span><span id="sub-flete-int">USD $684.75</span></div>
+                        <div class="sub-row"><span>Seguro internacional</span><span id="sub-seguro-int">USD $26.05</span></div>
+                    </div>
+                </div>
+
+                <!-- 3. Impuestos de importación -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion('impuestos-content', this)">
+                        <div>
+                            <div class="accordion-title">📋 Impuestos de importación</div>
+                            <div class="accordion-subtitle">Arancel, tasa, IVA y percepciones · parte recuperable</div>
+                        </div>
+                        <div class="accordion-price"><span id="res-total-imp">USD $2,128.18</span> <span class="accordion-arrow" style="font-size:0.8rem">▼</span></div>
+                    </button>
+                    <div id="impuestos-content" class="accordion-content">
+                        <div class="sub-row"><span>Derechos de importación (arancel)</span><span id="sub-arancel">USD $473.54</span></div>
+                        <div class="sub-row"><span>Tasa estadística</span><span id="sub-tasa">USD $78.92</span></div>
+                        <div class="sub-row"><span>IVA</span><span id="sub-iva">USD $668.49</span></div>
+                        <div class="sub-row"><span>IVA adicional</span><span id="sub-iva-add">USD $636.65</span></div>
+                        <div class="sub-row"><span>Percepción IIBB</span><span id="sub-iibb">USD $79.58</span></div>
+                        <div class="sub-row"><span>Percepción Ganancias</span><span id="sub-ganancias">USD $191.00</span></div>
+                    </div>
+                </div>
+
+                <!-- 4. Gastos en destino -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion('gastos-content', this)">
+                        <div>
+                            <div class="accordion-title">🏢 Gastos en destino</div>
+                            <div class="accordion-subtitle">Puerto, terminal, transporte y despacho</div>
+                        </div>
+                        <div class="accordion-price"><span id="res-gastos">USD $2,201.95</span> <span class="accordion-arrow" style="font-size:0.8rem">▼</span></div>
+                    </button>
+                    <div id="gastos-content" class="accordion-content">
+                        <div class="sub-row"><span>Tasa AGP (LCL)</span><span id="g-1">USD $18.89</span></div>
+                        <div class="sub-row"><span>Manejo de documentación (LCL)</span><span id="g-2">USD $75.00</span></div>
+                        <div class="sub-row"><span>Gastos administrativos depósito LCL</span><span id="g-3">USD $80.00</span></div>
+                        <div class="sub-row"><span>CF TLAT</span><span id="g-4">USD $90.00</span></div>
+                        <div class="sub-row"><span>Gastos operativos</span><span id="g-5">USD $300.00</span></div>
+                        <div class="sub-row"><span>Desconsolidación</span><span id="g-6">USD $118.06</span></div>
+                        <div class="sub-row"><span>Emisión BL</span><span id="g-7">USD $65.00</span></div>
+                        <div class="sub-row"><span>Depósito fiscal LCL 0 - 5 m³</span><span id="g-8">USD $865.00</span></div>
+                        <div class="sub-row"><span>Entrega LCL 0 - 5 m³</span><span id="g-9">USD $165.00</span></div>
+                        <div class="sub-row"><span>Aduana y liberación</span><span id="g-10">USD $350.00</span></div>
+                    </div>
+                </div>
+
+                <!-- 5. Intervenciones y certificaciones -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion('cert-content', this)">
+                        <div>
+                            <div class="accordion-title">🛡️ Intervenciones y certificaciones</div>
+                            <div class="accordion-subtitle">Organismos y certificados requeridos</div>
+                        </div>
+                        <div class="accordion-price"><span id="res-cert">USD $1,900.00</span> <span class="accordion-arrow" style="font-size:0.8rem">▼</span></div>
+                    </button>
+                    <div id="cert-content" class="accordion-content">
+                        <div class="sub-row"><span>ANMAT / Organismo regulador</span><span id="c-1">USD $600.00</span></div>
+                        <div class="sub-row"><span>Seguridad Eléctrica / Certificación</span><span id="c-2">USD $1,300.00</span></div>
+                    </div>
+                </div>
+
+                <!-- 6. Servicio PuntoAR -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion('serv-content', this)">
+                        <div>
+                            <div class="accordion-title">⚙️ Servicio PuntoAR</div>
+                            <div class="accordion-subtitle">Gestión, coordinación y despacho de tu operación</div>
+                        </div>
+                        <div class="accordion-price"><span id="res-servicio">USD $957.34</span> <span class="accordion-arrow" style="font-size:0.8rem">▼</span></div>
+                    </button>
+                    <div id="serv-content" class="accordion-content">
+                        <div class="sub-row"><span>Gestión y coordinación de la operación</span><span id="sub-serv-val">USD $957.34</span></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Total General -->
+            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 14px; padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <strong style="font-size: 1.1rem; color: var(--primary-dark);">Total cotización verificado</strong>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Suma total de todos los conceptos e ítems de la importación</p>
+                </div>
+                <div style="font-size: 1.6rem; font-weight: 800; color: var(--primary-color);" id="res-total-general">USD $9,818.27</div>
+            </div>
+
+            <button onclick="guardarPDF()" class="btn-pdf">
+                📥 Descargar reporte de cálculo en PDF
+            </button>
+            <button onclick="guardarDatosCotizacion()" class="btn-confirm" style="width: 100%; margin-top: 20px; justify-content: center; background: var(--primary-color); color: #fff;">
+                💾 Guardar cotización y fijar valores
+            </button>
+        </div>
+
+        <footer>
+            Valores sujetos a variación del tipo de cambio al momento del pago · Sistema PuntoAR
+            <div>puntoAR | empresa.puntoAR@gmail.com | +54 9 2266 41-5498</div>
+        </footer>
+    </div>
+
+    <script src="calculador.js"></script>
+</body>
+</html>
