@@ -117,10 +117,10 @@ function togglePaymentDetail(id, btn) {
 
     if (content.style.display === 'block') {
         content.style.display = 'none';
-        btn.innerHTML = `Ver qué incluye <span>▼</span>`;
+        btn.innerHTML = `Ver qué incluye`;
     } else {
         content.style.display = 'block';
-        btn.innerHTML = `Ocultar detalles <span>▲</span>`;
+        btn.innerHTML = `Ocultar detalles`;
     }
 }
 
